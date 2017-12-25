@@ -391,7 +391,6 @@ opzioni = """\nOptions and Commands:
         md5.decrypt      md5 hash Decrypter
 
  <Commands>
-        help             commands list
         clear            clear screen
         exit             exit
  """
